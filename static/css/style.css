@@ -1,0 +1,91 @@
+@font-face {
+    font-family: "byzantine";
+    src: url("../analecta.otf");
+}
+  
+* {
+    font-family: "byzantine";
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    outline: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    overflow: hidden;
+	align-items: center;
+	justify-content: center;
+    background-color: #111111;
+}
+
+@media only screen and (max-width:900px) {
+    * {
+        font-size: 0.7rem;
+    }
+    #map-wrapper {
+        height: 50%;
+        top: 0px;
+    }
+    #map-wrapper>img{
+        max-height: 100%;
+    }
+    #locations {
+        bottom: 0px;
+        height: 50%;
+        width: 100%;
+    }
+    #locations div {
+        max-width: 20%;
+    }
+    #details {
+        flex-flow: column wrap;
+    }
+    #details>div#media-container {
+        width: 95%;
+    }
+    #details>div#media-container>div#slideshow-container {
+        width: 100%;
+    }
+    #details>h1 {
+        top: 20px;
+    }
+    #details>p {
+        max-width: 90%;
+        font-size: 0.9rem;
+    }
+}
+
+@media only screen and (min-width:900px) {
+    #map-wrapper {
+        width: 50%;
+        right: 0px;
+    }
+    #map-wrapper>img {
+        max-width: 100%;
+    }
+    #locations {
+        left: 0px;
+        width: 50%;
+        height: 100%;
+    }
+    #locations div {
+        width: 200px;
+    }
+    #details {
+        flex-flow: row wrap;
+    }
+    #details>div#media-container {
+        width: 49%;
+    }
+    #details>div#media-container>div#slideshow-container {
+        width: 100%;
+    }
+    #details>h1 {
+        top: 0px;
+    }
+    #details>p {
+        max-width: 49%;
+    }
+}
