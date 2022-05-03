@@ -27,13 +27,13 @@ det_html = `
             <div class="dot-container">
             </div>
         </div>
-        <audio src="../../static/istoria/audio/{id}.mp3" style="width:100%;margin-top:10px;" controls></audio>
+        <audio src="static/audio/{id}.mp3" style="width:100%;margin-top:10px;" controls></audio>
     </div>
 </div>`
 det_slide_html = `
 <div class="slide">
     <div class="num">{image} / {images}</div>
-    <img src="../../static/istoria/images/{id}/{image}.jpg" style="width:100%">
+    <img src="static/images/{id}/{image}.jpg" style="width:100%">
     <div class="text">Λεζάντα</div>
 </div>`
 det_dot_html = `<span class="dot" onclick="currentSlide(this)"></span>`
