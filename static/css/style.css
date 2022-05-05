@@ -22,7 +22,7 @@ html, body {
 
 @media only screen and (max-width:900px) {
     * {
-        font-size: 1rem;
+        /* font-size: 1rem; */
     }
     #map-wrapper {
         height: 50%;
@@ -32,13 +32,15 @@ html, body {
         max-height: 100%;
     }
     #locations {
+        flex-flow: row wrap;
         bottom: 0px;
         height: 50%;
         width: 100%;
         max-width: 100%;
     }
     #locations div {
-        max-width: 20%;
+        max-width: 50%;
+        font-size: 1rem
     }
     #details {
         flex-flow: column wrap;
@@ -73,6 +75,7 @@ html, body {
     }
     #locations div {
         width: 200px;
+        font-size: 1.5rem;
     }
     #details {
         flex-flow: row wrap;
