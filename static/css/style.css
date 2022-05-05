@@ -35,6 +35,7 @@ html, body {
         bottom: 0px;
         height: 50%;
         width: 100%;
+        max-width: 100%;
     }
     #locations div {
         max-width: 20%;
