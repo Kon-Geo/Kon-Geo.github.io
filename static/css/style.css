@@ -27,6 +27,7 @@ html, body {
     #map-wrapper {
         height: 50%;
         top: 0px;
+        font-size: 0.7rem;
     }
     #map-wrapper>img{
         max-height: 100%;
