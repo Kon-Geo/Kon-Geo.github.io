@@ -4,4 +4,4 @@ app = Flask(__name__)
 def index():
     with open("index.html", "r") as f:
         return f.read()
-app.run(host="0.0.0.0")
+app.run(host="0.0.0.0", port=80)

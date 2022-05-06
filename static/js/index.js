@@ -21,8 +21,8 @@ det_html = `
 
     <div id="media-container">
         <div id="slideshow-container" class="slideshow-container">
-            <div class="prev" onclick="plusSlides(-1)">❮</div>
-            <div class="next" onclick="plusSlides(1)">❯</div>
+            <!-- <div class="prev" onclick="plusSlides(-1)">❮</div>
+            <div class="next" onclick="plusSlides(1)">❯</div> -->
 
             <div class="dot-container">
             </div>
@@ -54,7 +54,7 @@ function click(config) {
 
     for (let i = 0; i < config["images"]; i++) {
         slideshow_container.insertAdjacentHTML("afterbegin", det_slide_html
-            .replace("{image}", i + 1)
+            .replace("{image}", config["images"] - i)
             .replace("{image}", i)
             .replace("{images}", config["images"])
             .replace("{id}", config["id"])
