@@ -52,13 +52,13 @@ function click(config) {
     slideshow_container = media_container.children[0]
     dot_container = slideshow_container.children[slideshow_container.children.length - 1]
 
-    for (let i = 0; i < config["images"]; i++) {
+    for (let i = 0; i < config["captions"].length; i++) {
         slideshow_container.insertAdjacentHTML("afterbegin", det_slide_html
-            .replace("{image}", config["images"] - i)
-            .replace("{image}", i)
-            .replace("{images}", config["images"])
+            .replace("{image}", config["captions"].length - i)
+            .replace("{image}", config["captions"].length - i - 1)
+            .replace("{images}", config["captions"].length)
             .replace("{id}", config["id"])
-            .replace("{desc}", config["captions"][i])
+            .replace("{desc}", config["captions"][config["captions"].length - i - 1])
         )
         dot_container.insertAdjacentHTML("afterbegin", det_dot_html)
     }

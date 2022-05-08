@@ -14,10 +14,6 @@
     user-select: none;
 }
 
-#details>h1 {
-    font-size: 1.5rem
-}
-
 #details>h1>a {
     color: #FFF;
 }

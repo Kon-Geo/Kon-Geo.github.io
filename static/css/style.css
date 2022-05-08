@@ -55,11 +55,13 @@ html, body {
         margin-top: 50px;
     }
     #details>h1 {
+        position: absolute;
         top: 30px;
+        font-size: 0.9rem;
     }
     #details>p {
-        max-width: 90%;
-        font-size: 0.9rem;
+        margin-top: 100px;
+        font-size: 0.5rem;
     }
 }
 
@@ -96,6 +98,7 @@ html, body {
     #details>h1 {
         position: absolute;
         top: 0px;
+        font-size: 1.5rem;
     }
     #details>p {
         max-width: 49%;
