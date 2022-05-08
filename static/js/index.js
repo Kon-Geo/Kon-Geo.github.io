@@ -16,7 +16,7 @@ pin_html = `
 det_html = `
 <div id="details">
     <div id="back">← Πίσω</div>
-    <h1>{name}<br>{location}    <a class="icon fas fa-external-link-alt" href="{link}"></a></h1>
+    <h1>{name}<br>{location}    <a class="icon fas fa-external-link-alt" href="{link}" target="_blank"></a></h1>
     <p>{desc}</p>
 
     <div id="media-container">
