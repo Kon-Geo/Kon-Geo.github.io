@@ -58,7 +58,7 @@ function click(config) {
             .replace("{image}", i)
             .replace("{images}", config["images"])
             .replace("{id}", config["id"])
-            .replace("{desc}", "Λεζάντα")
+            .replace("{desc}", config["captions"][i])
         )
         dot_container.insertAdjacentHTML("afterbegin", det_dot_html)
     }
