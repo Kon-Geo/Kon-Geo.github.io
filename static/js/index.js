@@ -16,18 +16,17 @@ pin_html = `
 det_html = `
 <div id="details">
     <div id="back">← Πίσω</div>
-    <h1>{name}<br>{location}    <a class="icon fas fa-external-link-alt" href="{link}" target="_blank"></a></h1>
+    <h1>{name}<br>{location}<a class="icon fas fa-external-link-alt" href="{link}" target="_blank"></a></h1>
     <p>{desc}</p>
 
     <div id="media-container">
         <div id="slideshow-container" class="slideshow-container">
             <!-- <div class="prev" onclick="plusSlides(-1)">❮</div>
             <div class="next" onclick="plusSlides(1)">❯</div> -->
-
             <div class="dot-container">
             </div>
         </div>
-        <audio src="static/audio/{id}.mp3" style="width:100%;" controls></audio>
+        {audio}
     </div>
 </div>`
 det_slide_html = `
@@ -44,6 +43,7 @@ function click(config) {
         .replace("{desc}", config["description"])
         .replace("{location}", config["location"])
         .replace("{link}", config["link"])
+        .replace("{audio}", 1 == 1 ? `<audio src="static/audio/${config["id"]}.mp3" style="width:100%;" controls></audio>` : "")
         .replace("{id}", config["id"])
     )
     details = document.body.children["details"]
