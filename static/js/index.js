@@ -40,10 +40,10 @@ det_dot_html = `<span class="dot" onclick="currentSlide(this)"></span>`
 function click(config) {
     document.body.insertAdjacentHTML("beforeend", det_html
         .replace("{name}", config["name"])
-        .replace("{desc}", config["description"])
+        .replace("{desc}", config["description"].split("::").map((x) => {return `<p>${"&nbsp;".repeat(4)}${x}</p>`}).join(""))
         .replace("{location}", config["location"])
         .replace("{link}", config["link"])
-        .replace("{audio}", 1 == 1 ? `<audio src="static/audio/${config["id"]}.mp3" style="width:100%;" controls></audio>` : "")
+        .replace("{audio}", config["audio"] ? `<audio src="static/audio/${config["id"]}.mp3" style="width:100%;" controls></audio>` : "")
         .replace("{id}", config["id"])
     )
     details = document.body.children["details"]

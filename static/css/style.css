@@ -59,7 +59,7 @@ html, body {
         top: 30px;
         font-size: 0.9rem;
     }
-    #details span {
+    #details>span {
         margin-top: 100px;
         font-size: 0.5rem;
     }
@@ -87,7 +87,7 @@ html, body {
         flex-flow: row wrap;
     }
     #details>div#media-container {
-        width: 49%;
+        width: 45%;
     }
     #details>div#media-container>div#slideshow-container {
         width: 100%;
@@ -97,10 +97,12 @@ html, body {
     }
     #details>h1 {
         position: absolute;
+        width: 49%;
         top: 0px;
+        right: 0px;
         font-size: 1.5rem;
     }
-    #details span {
+    #details>span {
         max-width: 49%;
     }
 }
