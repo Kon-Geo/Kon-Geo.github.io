@@ -17,7 +17,7 @@ det_html = `
 <div id="details">
     <div id="back">← Πίσω</div>
     <h1>{name}<br>{location}<a class="icon fas fa-external-link-alt" href="{link}" target="_blank"></a></h1>
-    <p>{desc}</p>
+    <span>{desc}</span>
 
     <div id="media-container">
         <div id="slideshow-container" class="slideshow-container">
