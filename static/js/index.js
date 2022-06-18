@@ -21,10 +21,7 @@ det_html = `
 
     <div id="media-container">
         <div id="slideshow-container" class="slideshow-container">
-            <!-- <div class="prev" onclick="plusSlides(-1)">❮</div>
-            <div class="next" onclick="plusSlides(1)">❯</div> -->
-            <div class="dot-container">
-            </div>
+            <div class="dot-container"></div>
         </div>
         {audio}
     </div>
