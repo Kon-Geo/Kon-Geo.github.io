@@ -1,0 +1,64 @@
+body {margin: 0;}
+
+#wrapper {
+    font-family: Arial, Helvetica, sans-serif;
+    position: relative;
+    background-color: #000;
+    width: 100vw;
+    height: 100vh;
+    overflow-x: hidden;
+}
+
+#title {
+    color: #f00;
+    text-align: center;
+    font-size: 100px;
+}
+
+#startButton {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 100px;
+}
+
+#addPlayerButton {
+    font-size: 50px;
+}
+
+#playerList {width: 90%; border: 3px solid #f00; color: #fff; font-size: 50px;}
+#playerList td {border-top: 3px solid #f00; cursor: pointer;}
+
+#roleList {width: 90%; color: #fff; font-size: 50px; user-select: none;}
+#roleList td {border: 3px solid #f00; cursor: pointer;}
+
+#showRolesList {width: 90%; border: 3px solid #f00; color: #fff; font-size: 50px;}
+#showRolesList td {border-top: 3px solid #f00; cursor: pointer;}
+
+#voteList {width: 90%; border: 3px solid #f00; color: #fff; font-size: 50px;}
+#voteList td {border-top: 3px solid #f00; cursor: pointer;}
+
+#killList {width: 90%; border: 3px solid #f00; color: #fff; font-size: 50px;}
+#killList td {border-top: 3px solid #f00; cursor: pointer;}
+
+.btn-grad {
+    background-image: linear-gradient(to right, #e52d27 0%, #b31217  51%, #e52d27  100%);
+    margin: 10px;
+    padding: 15px 45px;
+    text-align: center;
+    text-transform: uppercase;
+    transition: 0.5s;
+    background-size: 200% auto;
+    color: white;
+    border-radius: 10px;
+    display: block;
+}
+
+.btn-grad:hover {
+    background-position: right center;
+    color: #fff;
+    text-decoration: none;
+}
+
+.navBtns {position: absolute; bottom: 150px; font-size: 50px;}

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Μια Νύχτα Στα Νέα Στύρα</title>
+        <link rel="stylesheet" href="style.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    </head>
+    <body>
+        <div id="wrapper">
+            <div id="startScreen">
+                <div id="title">Μια Νύχτα Στα Νέα Στύρα</div>
+                <button id="startButton" class="btn-grad">Start</button>
+            </div>
+            <div id="playersScreen" style="display: none;">
+                <center>
+                    <div id="title">Παίχτες</div>
+                    <button id="addPlayerButton" class="btn-grad">Προσθήκη Παίκτη</button>
+                    <table id="playerList"><tr><th>Παίχτες</th></tr></table>
+                </center>
+            </div>
+            <div id="selectRolesScreen" style="display: none;">
+                <center>
+                    <div id="title">Επιλογή Ρόλων</div>
+                    <table id="roleList"></table>
+                </center>
+            </div>
+            <div id="showRolesScreen" style="display: none;">
+                <center>
+                    <div id="title">Εμφάνιση Ρόλων</div>
+                    <table id="showRolesList"><tr><th>Παίχτες</th></tr></table>
+                </center>
+            </div>
+            <div id="voteScreen" style="display: none;">
+                <center>
+                    <div id="title">Ψηφοφορία</div>
+                    <table id="voteList"></table>
+                </center>
+            </div>
+            <div id="killScreen" style="display: none;">
+                <center>
+                    <div id="title">Δολοφονία</div>
+                    <table id="killList"></table>
+                </center>
+            </div>
+            <button id="backBtn" class="navBtns btn-grad" style="left: 10px; display: none;">←</button>
+            <button id="nextBtn" class="navBtns btn-grad" style="right: 10px;">→</button>
+        </div>
+        <audio hidden src="gun_shot_sfx.mp3" id="gun_shot_sfx"></audio>
+        <audio hidden src="gun_ready_sfx.mp3" id="gun_ready_sfx"></audio>
+        <script src="index.js"></script>
+    </body>
+</html>

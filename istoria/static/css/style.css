@@ -1,0 +1,116 @@
+@font-face {
+    font-family: "byzantine";
+    src: url("../analecta.otf");
+}
+  
+* {
+    font-family: "byzantine";
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    outline: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+	align-items: center;
+	justify-content: center;
+    background-color: #111111;
+}
+
+@media only screen and (max-width:900px) {
+    #map-wrapper {
+        height: 50%;
+        top: 0px;
+        font-size: 0.7rem;
+    }
+    #map-wrapper>img{
+        max-height: 100%;
+    }
+    #locations {
+        flex-flow: row wrap;
+        bottom: 0px;
+        height: 50%;
+        width: 100%;
+        max-width: 100%;
+    }
+    #locations div {
+        max-width: 50%;
+        font-size: 0.7rem;
+        margin: 10px 0px 0px 5px;
+    }
+    #details {
+        display: block !important;
+    }
+    #details>div#media-container {
+        display: inline-block;
+        width: 95%;
+    }
+    #details>div#media-container>div#slideshow-container {
+        margin-top: 100px;
+        width: 100%;
+    }
+    #details>div#media-container>audio {
+        margin-top: 50px;
+    }
+    #details>h1 {
+        position: absolute;
+        top: 30px;
+        font-size: 0.9rem;
+    }
+    #details>span {
+        display: inline-block;
+        top: 20px;
+        margin-top: 100px;
+        font-size: 0.5rem;
+    }
+    #details>span>p {
+        font-size: 0.8rem;
+    }
+    .tooltip-icon {
+        font-size: 1.2rem;
+    }
+}
+
+@media only screen and (min-width:900px) {
+    #map-wrapper {
+        width: 50%;
+        right: 0px;
+    }
+    #map-wrapper>img {
+        max-width: 100%;
+    }
+    #locations {
+        left: 0px;
+        width: 50%;
+        height: 100%;
+    }
+    #locations div {
+        width: 200px;
+        font-size: 1.5rem;
+        margin: 20px 0px 0px 10px;
+    }
+    #details {
+        flex-flow: row wrap;
+    }
+    #details>div#media-container {
+        width: 45%;
+    }
+    #details>div#media-container>div#slideshow-container {
+        width: 100%;
+    }
+    #details>div#media-container>audio {
+        margin-top: 10px;
+    }
+    #details>h1 {
+        position: absolute;
+        width: 49%;
+        top: 0px;
+        right: 0px;
+        font-size: 1.5rem;
+    }
+    #details>span {
+        max-width: 49%;
+    }
+}
