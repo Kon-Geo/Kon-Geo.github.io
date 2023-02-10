@@ -1,20 +1,104 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <title>Βυζαντινά Μνημεία Της Αθήνας</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="shortcut icon" href="static/favicon.ico">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-        <link rel="stylesheet" href="static/css/style.css">
-        <link rel="stylesheet" href="static/css/locations.css">
-        <link rel="stylesheet" href="static/css/details.css">
-        <link rel="stylesheet" href="static/css/tooltip.css">
-        <link rel="stylesheet" href="static/css/slideshow.css">
-    </head>
-    <body>
-        <div id="locations"></div>
-        <div id="map-wrapper" style="position: absolute;"><img id="map" src="static/map.jpg"></div>
-        <script src="static/js/index.js"></script>
-        <script src="static/js/slideshow.js"></script>
-    </body>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="static/favicon.ico">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+    <style>@font-face{font-family:"byzantine";src:url("../analecta.otf");}#main{font-family:byzantine,Arial,Helvetica;}</style>
+    <title>Βυζαντινά Μνημεία Της Αθήνας</title>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg" style="background-color: #2d3238;" data-bs-theme="dark">
+        <div class="navbar-brand">
+            <div class="container-fluid">Βυζαντινά Μνημεία Της Αθήνας</div>
+        </div>
+    </nav>
+    <br>
+    <div class="container-fluid d-flex flex-column flex-lg-row justify-content-around gap-3" style="max-width:100%;">
+        <div id="map-wrapper" class="container"><img id="map" class="img-fluid" src="static/map.jpg"></div>
+        <table id="locations" class="table table-striped table-dark table-bordered table-condensed shadow"></table>
+        <div id="card" class="card" style="display:none;">
+            <div class="card-header">
+                <div id="card-header"></div>
+            </div>
+            <div class="card-body">
+                <button id="back" class="btn btn-primary" style="display:none;width:100%;">Πίσω</button>
+                <br>
+                <br>
+                <span id="card-body"></span>
+                <div id="carousel" class="carousel carousel-fade" style="max-height:90vh;">
+                    <div class="carousel-indicators"></div>
+                    <div class="carousel-inner" style="max-height:90vh;"></div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>    
+    <script>
+        wrapper = document.getElementById("map-wrapper");
+        locations = document.getElementById("locations");
+        back = document.getElementById("back");
+        card = document.getElementById("card");
+        card_header = document.getElementById("card-header");
+        card_body = document.getElementById("card-body");
+        carousel = document.getElementById("carousel");
+        map = wrapper.children[0]
+
+        back.onclick = () => {
+            card.style.display = "none";
+            back.style.display = "none";
+            wrapper.style.display = null;
+            locations.style.display = null;
+        }
+
+        offset_calc = (x) => x * map.clientWidth / map.naturalWidth
+
+        function click(config) {
+            wrapper.style.display = "none";
+            locations.style.display = "none";
+            card.style.display = null;
+            back.style.display = null;
+
+            carousel.children[1].innerHTML = "";
+            carousel.children[0].innerHTML = "";
+
+            card_header.innerHTML = `${config["name"]} - ${config["location"]} - <a class="icon fas fa-external-link-alt" href="${config["link"]}" target="_blank"></a>`
+            card_body.innerHTML = config["description"].replaceAll("::", "<br><br>") + "<br><br>" + (config["audio"] ? `<audio src="static/audio/${config["id"]}.mp3" style="width:100%;" controls></audio><br><br>` : "<br><br>")
+
+            for (let i = 0; i < config["captions"].length; i++) {
+                carousel.children[1].insertAdjacentHTML("beforeend", `
+                    <div class="carousel-item ${i == 0 ? "active" : ""}">
+                        <img src="static/images/${config["id"]}/${i}.jpg" class="d-block w-100" style="object-fit:contain;height:90vh;">
+                        <div class="carousel-caption d-none d-md-block"><h5 style="background-color:#00000088">${config["captions"][i]}</h5></div>
+                    </div>
+                `)
+                carousel.children[0].insertAdjacentHTML("beforeend", `<button type="button" data-bs-target="#carousel" data-bs-slide-to="${i}" ${i == 0 ? 'class="active" aria-current="true"' : ""}></button>`)
+            }
+        }
+
+        fetch("static/items.json")
+        .then(response => response.json())
+        .then(data => {
+            for (i = 0; i < data.length; i++) {
+                let config = data[i]
+                locations.insertAdjacentHTML("beforeend", `<tr><td>${config["name"]}</td></tr>`)
+                locations.children[locations.children.length - 1].onclick = () => { click(config) }
+                wrapper.insertAdjacentHTML("beforeend", `<div style="position:absolute;top:${offset_calc(config["coords"][0]+130-1099) + "px"};left:${offset_calc(config["coords"][1]+40-336) + "px"};cursor:pointer;color:#A00;"><i class="icon fas fa-map-marker-alt"></i></div>`)
+                wrapper.children[wrapper.children.length - 1].onclick = () => { click(config) }
+            }
+        });
+    </script>
+</body>
 </html>
