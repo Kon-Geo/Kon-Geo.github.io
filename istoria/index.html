@@ -70,10 +70,8 @@
             locations.style.display = "none";
             card.style.display = null;
             back.style.display = null;
-
             carousel.children[1].innerHTML = "";
             carousel.children[0].innerHTML = "";
-
             card_header.innerHTML = `${config["name"]} - ${config["location"]} - <a class="icon fas fa-external-link-alt" href="${config["link"]}" target="_blank"></a>`
             card_body.innerHTML = config["description"].replaceAll("::", "<br><br>") + "<br><br>" + (config["audio"] ? `<audio src="static/audio/${config["id"]}.mp3" style="width:100%;" controls></audio><br><br>` : "<br><br>")
 
@@ -94,9 +92,9 @@
             for (i = 0; i < data.length; i++) {
                 let config = data[i]
                 locations.insertAdjacentHTML("beforeend", `<tr><td>${config["name"]}</td></tr>`)
-                locations.children[locations.children.length - 1].onclick = () => { click(config) }
-                wrapper.insertAdjacentHTML("beforeend", `<div style="position:absolute;top:${offset_calc(config["coords"][0]+130-1099) + "px"};left:${offset_calc(config["coords"][1]+40-336) + "px"};cursor:pointer;color:#A00;"><i class="icon fas fa-map-marker-alt"></i></div>`)
-                wrapper.children[wrapper.children.length - 1].onclick = () => { click(config) }
+                locations.children[i].onclick = () => { click(config) }
+                wrapper.insertAdjacentHTML("beforeend", `<div style="position:absolute;top:${offset_calc(config["coords"][0]+95-1099) + "px"};left:${offset_calc(config["coords"][1]+30-336) + "px"};cursor:pointer;color:#A00;font-size:1.8rem;"><i class="icon fas fa-map-marker-alt"></i></div>`)
+                wrapper.children[i + 1].onclick = () => { click(config) }
             }
         });
     </script>
