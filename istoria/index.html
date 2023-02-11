@@ -91,7 +91,7 @@
                 let config = data[i]
                 locations.insertAdjacentHTML("beforeend", `<tr><td>${config["name"]}</td></tr>`)
                 locations.children[i].onclick = () => { click(config) }
-                wrapper.insertAdjacentHTML("beforeend", `<div style="position:absolute;top:${offset_calc(config["coords"][0]+95-1099) + "px"};left:${offset_calc(config["coords"][1]+30-336) + "px"};cursor:pointer;color:#A00;font-size:1.8rem;"><i class="icon fas fa-map-marker-alt"></i></div>`)
+                wrapper.insertAdjacentHTML("beforeend", `<div style="position:absolute;top:${offset_calc(config["coords"][0]+80-1099-355) + "px"};left:${offset_calc(config["coords"][1]+25-336-355) + "px"};cursor:pointer;color:#A00;font-size:1.8rem;"><i class="icon fas fa-map-marker-alt"></i></div>`)
                 wrapper.children[i + 1].onclick = () => { click(config) }
             }
         });
