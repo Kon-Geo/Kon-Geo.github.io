@@ -4,49 +4,43 @@
         <title>Μια Νύχτα Στα Νέα Στύρα</title>
         <link rel="stylesheet" href="style.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
     </head>
-    <body>
-        <div id="wrapper">
-            <div id="startScreen">
-                <div id="title">Μια Νύχτα Στα Νέα Στύρα</div>
-                <button id="startButton" class="btn-grad">Start</button>
+    <body class="bg-black">
+        <button id="backBtn" class="btn btn-lg btn-danger float-start">←</button>
+        <button id="nextBtn" class="btn btn-lg btn-danger float-end">→</button>
+        <div class="d-flex align-items-center justify-content-center" style="height: 100vh;">
+            <div class="text-center" id="startScreen">
+                <h1 class="text-white">Μια Νύχτα Στα Νέα Στύρα</h1>
+                <button id="startButton" class="btn btn-danger fs-1">Start</button>
             </div>
-            <div id="playersScreen" style="display: none;">
-                <center>
-                    <div id="title">Παίχτες</div>
-                    <button id="addPlayerButton" class="btn-grad">Προσθήκη Παίκτη</button>
-                    <table id="playerList"><tr><th>Παίχτες</th></tr></table>
-                </center>
+            <div class="text-center" id="playersScreen" style="display: none;">
+                <h1 class="text-white">Παίχτες</h1>
+                <button id="addPlayerButton" class="btn btn-danger">Προσθήκη Παίκτη</button>
+                <br>
+                <br>
+                <table id="playerList" class="table"><tbody></tbody></table>
             </div>
-            <div id="selectRolesScreen" style="display: none;">
-                <center>
-                    <div id="title">Επιλογή Ρόλων</div>
-                    <table id="roleList"></table>
-                </center>
+            <div class="text-center" id="selectRolesScreen" style="display: none;">
+                <h1 class="text-white">Επιλογή Ρόλων</h1>
+                <table id="roleList" class="table"><tbody></tbody></table>
             </div>
-            <div id="showRolesScreen" style="display: none;">
-                <center>
-                    <div id="title">Εμφάνιση Ρόλων</div>
-                    <table id="showRolesList"><tr><th>Παίχτες</th></tr></table>
-                </center>
+            <div class="text-center" id="showRolesScreen" style="display: none;">
+                <h1 class="text-white">Εμφάνιση Ρόλων</h1>
+                <table id="showRolesList" class="table"><tbody></tbody></table>
             </div>
-            <div id="voteScreen" style="display: none;">
-                <center>
-                    <div id="title">Ψηφοφορία</div>
-                    <table id="voteList"></table>
-                </center>
+            <div class="text-center" id="voteScreen" style="display: none;">
+                <h1 class="text-white">Ψηφοφορία</h1>
+                <table id="voteList" class="table"><tbody></tbody></table>
             </div>
-            <div id="killScreen" style="display: none;">
-                <center>
-                    <div id="title">Δολοφονία</div>
-                    <table id="killList"></table>
-                </center>
+            <div class="text-center" id="killScreen" style="display: none;">
+                <h1 class="text-white">Δολοφονία</h1>
+                <table id="killList" class="table"><tbody></tbody></table>
             </div>
-            <button id="backBtn" class="navBtns btn-grad" style="left: 10px; display: none;">←</button>
-            <button id="nextBtn" class="navBtns btn-grad" style="right: 10px;">→</button>
         </div>
         <audio hidden src="gun_shot_sfx.mp3" id="gun_shot_sfx"></audio>
         <audio hidden src="gun_ready_sfx.mp3" id="gun_ready_sfx"></audio>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
         <script src="index.js"></script>
     </body>
 </html>

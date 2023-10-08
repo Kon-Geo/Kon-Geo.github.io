@@ -1,17 +1,16 @@
-var wrapper = $("#wrapper");
 var startScreen = $("#startScreen");
 var startButton = $("#startButton");
 var playersScreen = $("#playersScreen");
 var addPlayerButton = $("#addPlayerButton");
-var playerList = $("#playerList");
+var playerList = $("#playerList > tbody");
 var selectRolesScreen = $("#selectRolesScreen");
-var roleList = $("#roleList");
+var roleList = $("#roleList > tbody");
 var showRolesScreen = $("#showRolesScreen");
-var showRolesList = $("#showRolesList");
+var showRolesList = $("#showRolesList > tbody");
 var voteScreen = $("#voteScreen");
-var voteList = $("#voteList");
+var voteList = $("#voteList > tbody");
 var killScreen = $("#killScreen");
-var killList = $("#killList");
+var killList = $("#killList > tbody");
 var gun_shot_sfx = document.getElementById("gun_shot_sfx");
 var gun_ready_sfx = document.getElementById("gun_ready_sfx");
 
@@ -52,9 +51,7 @@ resetSelectedRoles()
 
 function reenterPlayerLists() {
     playerList.empty();
-    playerList.append("<tr><th>Παίχτες</th></tr>");
     showRolesList.empty();
-    showRolesList.append("<tr><th>Παίχτες</th></tr>");
     for (const [index, data] of Object.entries(PlayerList)) {
         playerList.append(`<tr onclick="remPlayer('${index}')"><td>${data[0]}</td></tr>`);
         showRolesList.append(`<tr onclick="showRole('${index}')"><td>${data[0]}</td></tr>`);
@@ -218,7 +215,6 @@ function killPlayer(index) {
 function startVote() {
     killScreen.fadeOut();
     voteScreen.fadeIn();
-    voteList.append("<tr><th>Παίχτες</th></tr>")
     for (const [index, data] of Object.entries(PlayerList)) {
         Votes[data[0]] = 0
         voteList.append(`<tr ${data[2] ? `onclick="votePlayer('${index}', this)"` : ""}><td>${data[2] ? 0 : "✖"} | ${data[0]}</td></tr>`);
@@ -229,7 +225,6 @@ function startVote() {
 function startKill() {
     voteScreen.fadeOut();
     killScreen.fadeIn();
-    killList.append("<tr><th>Παίχτες</th></tr>")
     for (const [index, data] of Object.entries(PlayerList)) {
         killList.append(`<tr ${data[2] ? `onclick="killPlayer('${index}')"` : ""}><td>${data[2] ? "" : "✖ "}${data[0]}</td></tr>`);
     }
