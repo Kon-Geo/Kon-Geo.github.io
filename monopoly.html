@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.1/jquery-ui.min.js"></script>
+    <title>Monopoly Bank</title>
+</head>
+<body>
+    <style>.ui-draggable-dragging{z-index:999;}</style>
+    <nav class="navbar" style="background-color: #2d3238;" data-bs-theme="dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Monopoly Bank</a>
+        </div>
+    </nav>
+    <br>
+    <div class="container">
+        <button class="btn btn-primary" onclick="add_player()">Add Player</button>
+        <div class="players d-flex flex-row flex-wrap gap-3 py-3">
+            <div class="card" style="width: 18.75rem; height: 8.6rem;">
+                <div class="card-header">Delete</div>
+                <div class="card-body d-flex align-items-center justify-content-center">
+                    <i class="bi bi-trash fs-1 text-danger"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+    <script>
+        var card = `
+            <div class="card" style="width: 18.75rem; height: 8.6rem;">
+                <div class="card-header">
+                    <span class="d-inline text-truncate name" style="max-width: 10rem;">{NAME}</span> - <b class="money">{MONEY}</b>€
+                    <button class="btn float-end p-0 text-danger" onclick=delete_player(this)><i class="bi bi-trash"></i></button>
+                </div>
+                <div class="card-body">
+                    <div class="form-floating">
+                        <input class="form-control" placeholder="Transfer Amount">
+                        <label class="form-label">Transfer Amount</label>
+                    </div>
+                </div>
+            </div>
+        `
+        var players = []
+        var players_container = document.querySelector(".players")
+
+        function get_index(element) {
+            return Array.from(players_container.children).indexOf(element);
+        }
+
+        function create_player(name, money) {
+            players_container.insertAdjacentHTML("beforeend", card.replace("{NAME}", name).replace("{MONEY}", money));
+            let index = players.push(money);
+            let card_el = players_container.children[index];
+            $(card_el).droppable({
+                drop: function(event, ui) {
+                    let origin_card = ui.draggable[0];
+                    let origin_index = get_index(origin_card);
+                    let origin_name = origin_card.querySelector(".name").innerHTML;
+                    let origin_money = origin_card.querySelector(".money");
+                    let origin_input = origin_card.querySelector("input");
+                    let transfer_money = parseInt(origin_input.value);
+                    let dest_name = card_el.querySelector(".name").innerHTML;
+                    let dest_money = card_el.querySelector(".money");
+                    let transfer_confirmation = confirm(`Tranfer ${transfer_money} from ${origin_name} to ${dest_name}?`);
+                    console.log(!isNaN(transfer_money), transfer_confirmation)
+                    if (!isNaN(transfer_money) && transfer_confirmation) {
+                        players[index - 1] += transfer_money;
+                        players[origin_index - 1] -= transfer_money;
+                        dest_money.innerHTML = players[index - 1];
+                        origin_money.innerHTML = players[origin_index - 1];
+                    }
+                }
+            });
+            $(card_el).draggable({
+                revert: true,
+                revertDuration: 200,
+            });
+        }
+
+        function add_player() {
+            let name = prompt("Enter player name");
+            if (name != null && name != "") {
+                create_player(name, 1500);
+            }
+        }
+
+        function delete_player(element) {
+            let card_el = element.parentNode.parentNode;
+            let name = card_el.querySelector(".name").innerHTML
+            if (confirm(`Delete ${name}?`)) {
+                let index = get_index(card_el);
+                card_el.remove();
+                players.splice(index - 1, 1)
+            }
+        }
+
+        create_player("Bank", 20580)
+
+        $(players_container.children[0]).droppable({
+            drop: function(event, ui) {
+                let origin_card = ui.draggable[0];
+                let origin_index = get_index(origin_card);
+                let origin_money = origin_card.querySelector(".money");
+                let origin_input = origin_card.querySelector("input");
+                let transfer_money = parseInt(origin_input.value);
+                if (!isNaN(transfer_money) && transfer_money != "") {
+                    players[origin_index - 1] -= transfer_money;
+                    origin_money.innerHTML = players[origin_index - 1];
+                }
+            }
+        });
+    </script>
+</body>
+</html>
