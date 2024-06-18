@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Antenna Limits Designer</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app">
+        <div id="antenna1"></div>
+        <!-- <div class="alburo"></div> -->
+        <div id="antenna2"></div>
+    </div>
+    <script>
+        const app = document.querySelector("#app");
+        const antenna1 = document.querySelector("#antenna1");
+        const antenna2 = document.querySelector("#antenna2");
+        const major_degrees = [0, 90, 180, 270];
+        const minor_degrees = [45, 135, 225, 315];
+        const additional_fields = {
+            "el_trim":["number", "EL TRIM"],
+            "az_trim":["number", "AZ TRIM"],
+        };
+
+        function process_degrees(degrees) {
+            return Math.floor((degrees || 0) / 10)
+        }
+
+        function Compass(element, c_rotate=0, az_l1=0, az_l2=0, deadzone_color="#CCCCCC") {
+            let self = this;
+            self.element = element;
+            self.dot = null;
+            self.deadzone = null;
+            self.label = null;
+
+            self.element.classList.add("compass");
+            self.c_rotate = 0;
+            c_rotate_setter(c_rotate);
+            self.az_limits = {"1":0, "2":0};
+            az_limit_setter(az_l1, "1");
+            az_limit_setter(az_l2, "2");
+            self.deadzone_color = deadzone_color;
+            create_dot();
+            create_deadzone();
+            for (let degrees = 0; degrees < 360; degrees += 5) {
+                create_label(degrees);
+            }
+
+            function c_rotate_setter(variable) {
+                if (variable.tagName === "INPUT") {
+                    variable.addEventListener("input", () => {
+                        self.c_rotate = process_degrees(variable.value);
+                        self.element.style = `--crotate: ${self.c_rotate}deg`;
+                        update_deadzone();
+                    })
+                } else {
+                    self.c_rotate = process_degrees(variable);
+                    self.element.style = `--crotate: ${self.c_rotate}deg`;
+                    update_deadzone();
+                }
+            }
+
+            function az_limit_setter(variable, limit_entry) {
+                if (variable.tagName === "INPUT") {
+                    variable.addEventListener("input", () => {
+                        self.az_limits[limit_entry] = process_degrees(variable.value);
+                        update_deadzone();
+                    })
+                } else {
+                    self.az_limits[limit_entry] = process_degrees(variable);
+                }
+            }
+
+            function create_dot() {
+                let div = document.createElement("div");
+                div.classList.add("dot");
+                self.element.appendChild(div);
+                self.dot = div;
+            }
+
+            function create_deadzone() {
+                let div = document.createElement("div");
+                div.classList.add("deadzone");
+                self.element.appendChild(div);
+                self.deadzone = div;
+                update_deadzone();
+            }
+            
+            function update_deadzone() {
+                if (self.az_limits["1"] > self.az_limits["2"]) {
+                    self.az_limits["1"] = self.az_limits["1"] - 360;
+                }
+                self.deadzone.style.transform = `translate(-50%, -50%) rotate(${self.c_rotate + self.az_limits["1"]}deg)`;
+                self.deadzone.style.background = `conic-gradient(${self.deadzone_color} ${(self.az_limits["2"] - self.az_limits["1"])}deg, transparent 0deg)`;
+            }
+
+            function create_label(degrees) {
+                let div = document.createElement("div");
+                div.classList.add("label");
+                div.style = `--rotate: ${degrees}deg;`
+                let line = document.createElement("div");
+                div.appendChild(line);
+                self.element.appendChild(div);
+                if (major_degrees.includes(degrees)) {
+                    div.classList.add("lg");
+                } else if (minor_degrees.includes(degrees)) {
+                    div.classList.add("md");
+                } else if (degrees % 10 == 0) {
+                    div.classList.add("sm");
+                } else {
+                    return;
+                }
+                div.innerHTML += degrees;
+            }
+
+            return {
+                element: self.element,
+                dot: self.dot,
+                deadzone: self.deadzone
+            }
+        }
+
+        function Antenna(element, title, additional_fields={}) {
+            let self = this;
+            self.element = element;
+            self.title = null;
+            self.compass = null;
+
+            self.element.classList.add("antenna");
+            self.fields = {
+                "c_rotate":["number", "OFFSET"],
+                "az_l1":["number", "AZ LIMIT 1"],
+                "az_l2":["number", "AZ LIMIT 2"],
+            };
+            self.fieldElements = {};
+            for (const [name, label] of Object.entries(additional_fields)) {
+                self.fields[name] = label;
+            }
+
+            create_title();
+            create_compass();
+            create_fields();
+            new Compass(self.compass, self.fieldElements["c_rotate"], self.fieldElements["az_l1"], self.fieldElements["az_l2"]);
+
+            function create_title() {
+                let div = document.createElement("div");
+                div.classList.add("title");
+                div.innerHTML = title;
+                self.element.appendChild(div);
+                self.title = div;
+            }
+            
+            function create_compass() {
+                let div = document.createElement("div");
+                div.classList.add("compass");
+                self.element.appendChild(div);
+                self.compass = div;
+            }
+
+            function create_fields() {
+                let table = document.createElement("table");
+                table.classList.add("fields");
+                for (const [name, [type, label]] of Object.entries(self.fields)) {
+                    let tr = document.createElement("tr");
+
+                    let th = document.createElement("th");
+                    th.innerHTML = label + ": ";
+                    tr.appendChild(th);
+
+                    let td = document.createElement("td");
+                    let input = document.createElement("input");
+                    input.setAttribute("type", type);
+                    self.fieldElements[name] = input;
+                    td.append(input);
+                    tr.append(td);
+
+                    table.appendChild(tr);
+                }
+                self.element.appendChild(table);
+            }
+
+            return {
+                element: self.element,
+                title: self.title,
+                compass: self.compass
+            }
+        }
+
+        new Antenna(antenna1, "PORT Antenna", additional_fields);
+        new Antenna(antenna2, "STB Antenna", additional_fields);
+    </script>
+</body>
+</html>
