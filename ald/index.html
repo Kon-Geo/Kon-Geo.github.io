@@ -7,24 +7,34 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="app">
-        <div id="antenna1"></div>
-        <!-- <div class="alburo"></div> -->
-        <div id="antenna2"></div>
-    </div>
     <script>
-        const app = document.querySelector("#app");
-        const antenna1 = document.querySelector("#antenna1");
-        const antenna2 = document.querySelector("#antenna2");
         const major_degrees = [0, 90, 180, 270];
         const minor_degrees = [45, 135, 225, 315];
+        const fieldElements = {};
         const additional_fields = {
+        };
+        const common_fields = {            
             "el_trim":["number", "EL TRIM"],
             "az_trim":["number", "AZ TRIM"],
+            "satelite":["string", "SATELITE"],
+            "frequency":["number", "FREQUENCY"],
+            "nid":["string", "NID"],
+            "fec":["string", "FEC"],
+            "baud_rate":["number", "BAUD RATE"],
         };
+        const default_values = {
+        }
 
         function process_degrees(degrees) {
-            return Math.floor((degrees || 0) / 10)
+            return Math.floor((degrees || 0) / 10) % 360
+        }
+
+        function input_checker(variable, callback) {
+            if (variable.tagName === "INPUT") {
+                variable.addEventListener("input", () => {callback(variable.value)});
+            } else {
+                callback(variable);
+            }
         }
 
         function Compass(element, c_rotate=0, az_l1=0, az_l2=0, deadzone_color="#CCCCCC") {
@@ -36,40 +46,30 @@
 
             self.element.classList.add("compass");
             self.c_rotate = 0;
-            c_rotate_setter(c_rotate);
             self.az_limits = {"1":0, "2":0};
+            self.deadzone_color = deadzone_color;
+            create_deadzone();
             az_limit_setter(az_l1, "1");
             az_limit_setter(az_l2, "2");
-            self.deadzone_color = deadzone_color;
             create_dot();
-            create_deadzone();
+            c_rotate_setter(c_rotate);
             for (let degrees = 0; degrees < 360; degrees += 5) {
                 create_label(degrees);
             }
 
             function c_rotate_setter(variable) {
-                if (variable.tagName === "INPUT") {
-                    variable.addEventListener("input", () => {
-                        self.c_rotate = process_degrees(variable.value);
-                        self.element.style = `--crotate: ${self.c_rotate}deg`;
-                        update_deadzone();
-                    })
-                } else {
-                    self.c_rotate = process_degrees(variable);
+                input_checker(variable, (value) => {
+                    self.c_rotate = process_degrees(value);
                     self.element.style = `--crotate: ${self.c_rotate}deg`;
                     update_deadzone();
-                }
+                })
             }
 
             function az_limit_setter(variable, limit_entry) {
-                if (variable.tagName === "INPUT") {
-                    variable.addEventListener("input", () => {
-                        self.az_limits[limit_entry] = process_degrees(variable.value);
-                        update_deadzone();
-                    })
-                } else {
-                    self.az_limits[limit_entry] = process_degrees(variable);
-                }
+                input_checker(variable, (value) => {
+                    self.az_limits[limit_entry] = process_degrees(value);
+                    update_deadzone();
+                })
             }
 
             function create_dot() {
@@ -121,9 +121,57 @@
             }
         }
 
+        function TablesCreator(fields, prefix, step=5) {
+            if (prefix === undefined) {
+                return;
+            }
+            let self = this;
+            self.element = document.createElement("div");
+            self.element.classList.add("tables");
+            self.fields = fields;
+            self.prefix = prefix;
+            self.step = step;
+            create_tables();
+
+            function create_tables() {
+                let keys = Object.keys(self.fields);
+                for (let i = 0; i < keys.length; i += self.step) {
+                    let table = document.createElement("table");
+                    table.classList.add("fields");
+                    create_fields(table, keys.slice(i, i + self.step));
+                    self.element.appendChild(table);
+                }
+            }
+
+            function create_fields(table, field_keys) {
+                for (const key of field_keys) {
+                    const [type, label] = self.fields[key];
+                    let tr = document.createElement("tr");
+
+                    let th = document.createElement("th");
+                    th.innerHTML = label + ": ";
+                    tr.appendChild(th);
+
+                    let td = document.createElement("td");
+                    let input = document.createElement("input");
+                    input.setAttribute("type", type);
+                    fieldElements[`${self.prefix}_${key}`] = input;
+                    td.append(input);
+                    tr.append(td);
+
+                    table.appendChild(tr);
+                }
+            }
+
+            return {
+                element: self.element
+            }
+        }
+
         function Antenna(element, title, additional_fields={}) {
             let self = this;
             self.element = element;
+            let id = self.element.id;
             self.title = null;
             self.compass = null;
 
@@ -133,15 +181,14 @@
                 "az_l1":["number", "AZ LIMIT 1"],
                 "az_l2":["number", "AZ LIMIT 2"],
             };
-            self.fieldElements = {};
             for (const [name, label] of Object.entries(additional_fields)) {
                 self.fields[name] = label;
             }
-
+            
             create_title();
             create_compass();
-            create_fields();
-            new Compass(self.compass, self.fieldElements["c_rotate"], self.fieldElements["az_l1"], self.fieldElements["az_l2"]);
+            create_tables();
+            new Compass(self.compass, fieldElements[`${id}_c_rotate`], fieldElements[`${id}_az_l1`], fieldElements[`${id}_az_l2`]);
 
             function create_title() {
                 let div = document.createElement("div");
@@ -158,26 +205,9 @@
                 self.compass = div;
             }
 
-            function create_fields() {
-                let table = document.createElement("table");
-                table.classList.add("fields");
-                for (const [name, [type, label]] of Object.entries(self.fields)) {
-                    let tr = document.createElement("tr");
-
-                    let th = document.createElement("th");
-                    th.innerHTML = label + ": ";
-                    tr.appendChild(th);
-
-                    let td = document.createElement("td");
-                    let input = document.createElement("input");
-                    input.setAttribute("type", type);
-                    self.fieldElements[name] = input;
-                    td.append(input);
-                    tr.append(td);
-
-                    table.appendChild(tr);
-                }
-                self.element.appendChild(table);
+            function create_tables() {
+                let tables = new TablesCreator(self.fields, id);
+                self.element.appendChild(tables.element);
             }
 
             return {
@@ -187,8 +217,35 @@
             }
         }
 
-        new Antenna(antenna1, "PORT Antenna", additional_fields);
-        new Antenna(antenna2, "STB Antenna", additional_fields);
+        function App() {
+            let self = this;
+            self.element = document.createElement("div");
+            self.element.id = "app";
+            document.body.appendChild(self.element);
+
+            self.port_div = document.createElement("div");
+            self.port_div.id = "port";
+            self.element.appendChild(self.port_div);
+            self.port_antenna = new Antenna(self.port_div, "PORT Antenna", additional_fields);
+
+            self.stbd_div = document.createElement("div");
+            self.stbd_div.id = "stbd";
+            self.element.appendChild(self.stbd_div);
+            self.stbd_antenna = new Antenna(self.stbd_div, "STBD Antenna", additional_fields);
+
+            let tables = TablesCreator(common_fields, "cmmn", 10);
+            tables.element.id = "common_fields";
+            self.element.appendChild(tables.element);
+
+            for (const [key, value] of Object.entries(default_values)) {
+                if (fieldElements[key]) {
+                    fieldElements[key].value = value;
+                    fieldElements[key].dispatchEvent(new Event("input"));
+                }
+            }
+        }
+
+        new App();
     </script>
 </body>
 </html>
