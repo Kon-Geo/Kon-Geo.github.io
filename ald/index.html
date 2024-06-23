@@ -12,10 +12,10 @@
         const minor_degrees = [45, 135, 225, 315];
         const fieldElements = {};
         const additional_fields = {
-        };
-        const common_fields = {            
             "el_trim":["number", "EL TRIM"],
             "az_trim":["number", "AZ TRIM"],
+        };
+        const common_fields = {            
             "satelite":["string", "SATELITE"],
             "frequency":["number", "FREQUENCY"],
             "nid":["string", "NID"],
@@ -234,6 +234,7 @@
             self.stbd_antenna = new Antenna(self.stbd_div, "STBD Antenna", additional_fields);
 
             let tables = TablesCreator(common_fields, "cmmn", 10);
+            tables.element.children[0].insertAdjacentHTML("afterbegin", `<tr><th colspan="2" style="text-align: center; border-bottom: 3px solid black;">COMMON VALUES</th></tr>`)
             tables.element.id = "common_fields";
             self.element.appendChild(tables.element);
 
