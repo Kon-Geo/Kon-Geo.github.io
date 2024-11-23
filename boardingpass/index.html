@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+    <script src="ean13.js"></script>
+</head>
+<body>
+    <style>
+        @font-face {
+            font-family: "Cinzel";
+            src: url("Cinzel-Regular.ttf");
+        }
+        @font-face {
+            font-family: "Venezio-Bold-Italic";
+            src: url("Venezio-Bold-Italic.ttf");
+        }
+        @font-face {
+            font-family: "Quicksand-Regular";
+            src: url("Quicksand-Regular.otf");
+        }
+        .venezio {
+            font-family: "Venezio-Bold-Italic";
+        }
+
+        .f-c {
+            flex-direction: column !important;
+        }
+        .f-w {
+            flex-wrap: wrap !important;
+        }
+        .j-c-c {
+            justify-content: center !important;
+        }
+        .a-i-c {
+            align-items: center !important;
+        }
+
+        .ticket {
+            --ticket-width: 60rem;
+            --ticket-height: calc(var(--ticket-width) * 3/8);
+            width: var(--ticket-width);
+            /* height: var(--ticket-height); */
+            height: 22.5rem;
+            background-color: #242B34;
+            color: white;
+            font-family: "Cinzel";
+        }
+
+        #airplane {
+            display: inline-block;
+            rotate: 90deg;
+            width: 3.5em;
+            rotate: -90deg;
+            transform-origin: center center;
+        }
+ 
+        .vertical {
+            writing-mode: vertical-rl;
+            transform: rotate(180deg);
+        }
+
+        #barcode {
+            --width: 4.5em;
+            --height: 0.8em;
+            position: relative;
+            top: calc(var(--height) * 7.15);
+            transform: rotate(-90deg);
+            transform-origin: center center;
+            img {
+                height: calc(var(--ticket-width) * 1 / 12);
+                width: var(--height);
+            }
+        }
+
+        .boarding-pass {
+            letter-spacing: 5px;
+            line-height: 1.2;
+        }
+
+        .details {
+            font-family: "Quicksand-Regular";
+            h5 {
+                margin: 0;
+                text-decoration: underline;
+            }
+        }
+
+        .gradient {
+            background: linear-gradient(45deg, #D1990D, #FFD900, #BF7326);
+            background-clip: text;
+            color: transparent;
+        }
+
+        .my-vr {
+            border-right: 1px solid #5B6067;
+        }
+
+        .up {
+            height: 15%;
+        }
+        .mid {
+            height: 75%;
+        }
+        .down {
+            height: 10%;
+        }
+    </style>
+    <div class="container d-flex f-w j-c-c a-i-c gap-3 vh-100 vw-100">
+        <div class="d-flex f-c a-i-c rounded-5 ticket">
+            <div class="d-flex a-i-c border-warning border-bottom w-100 up">
+                <div class="col-1 text-center">
+                    <img src="airplane.svg" id="airplane">
+                </div>
+                <div class="col-1"></div>
+                <div class="boarding-pass gradient fs-1 pt-1 ps-3 col-7 my-vr">BOARDING PASS</div>
+                <div class="fs-5 ps-3 col-3">BOARDING PASS</div>
+            </div>
+            <div class="d-flex a-i-c mid">
+                <div class="field-company gradient vertical fs-1 d-flex a-i-c overflow-hidden col-1">
+                    COMPANY
+                </div>
+                <div id="barcode" class="d-flex col-1"></div>
+                <div class="d-flex f-c px-3 col-7 h-100 my-vr">
+                    <div class="details d-flex f-w overflow-auto">
+                        <div class="col-12">
+                            <h5>Passenger</h5>
+                            <h1 class="field-passenger venezio gradient">Passenger</h1>
+                        </div>
+                        <div class="col-6">
+                            <h5>Boarding</h5>
+                            <h4 class="field-boarding">Boarding</h4>
+                        </div>
+                        <div class="col-3">
+                            <h5>Gate</h5>
+                            <h4 class="field-gate">Gate</h4>
+                        </div>
+                        <div class="col-3">
+                            <h5>Seat</h5>
+                            <h4 class="field-seat">Seat</h4>
+                        </div>
+                        <div class="col-6">
+                            <h5>Flight</h5>
+                            <h4 class="field-flight">Flight</h4>
+                        </div>
+                        <div class="col-6">
+                            <h5>Date</h5>
+                            <h4 class="field-date">Date</h4>
+                        </div>
+                        <div class="col-6">
+                            <h5>From</h5>
+                            <h4 class="field-from">From</h4>
+                        </div>
+                        <div class="col-6">
+                            <h5>To</h5>
+                            <h4 class="field-to">To</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="vr"></div>
+                <div class="d-flex f-c h-100 px-3 col-3">
+                    <div class="d-flex f-w overflow-auto details">
+                        <div class="col-12">
+                            <h5>Passenger</h5>
+                            <h6 class="field-passenger">Passenger</h6>
+                        </div>
+                        <div class="col-8">
+                            <h5>Boarding</h5>
+                            <h6 class="field-boarding">Boarding</h6>
+                        </div>
+                        <div class="col-4">
+                            <h5>Gate</h5>
+                            <h6 class="field-gate">Gate</h6>
+                        </div>
+                        <div class="col-6">
+                            <h5>Flight</h5>
+                            <h6 class="field-flight">Flight</h6>
+                        </div>
+                        <div class="col-6">
+                            <h5>Date</h5>
+                            <h6 class="field-date">Date</h6>
+                        </div>
+                        <div class="col-6">
+                            <h5>From</h5>
+                            <h6 class="field-from">From</h6>
+                        </div>
+                        <div class="col-6">
+                            <h5>To</h5>
+                            <h6 class="field-to">To</h6>
+                        </div>
+                        <div class="col-6">
+                            <h5>Seat</h5>
+                            <h6 class="field-seat">Seat</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex a-i-c border-warning border-top w-100 down">
+                <div class="col-2"></div>
+                <div class="fs-5 px-3 col-7 field-class my-vr">CLASS</div>
+                <div class="fs-5 px-3 col-3 field-class">CLASS</div>
+            </div>
+        </div>
+        <div class="d-flex f-c" id="controls"></div>
+    </div>
+    
+    <script>
+        const fields = {
+            ".field-class": "Class",
+            ".field-to": "To",
+            ".field-from": "From",
+            ".field-date": "Date",
+            ".field-flight": "Flight",
+            ".field-seat": "Seat",
+            ".field-gate": "Gate",
+            ".field-boarding": "Boarding",
+            ".field-passenger": "Passenger",
+            ".field-company": "Company",
+        }
+        const controls = document.getElementById("controls");
+
+        for (const [selector, placeholder] of Object.entries(fields)) {
+            const input = document.createElement("input");
+            const targets = document.querySelectorAll(selector);
+            input.placeholder = placeholder;
+            input.addEventListener("input", () => {
+                targets.forEach((element) => {
+                    element.innerHTML = input.value;
+                })
+            })
+            controls.insertAdjacentElement("afterbegin", input);
+        }
+
+        document.getElementById("barcode").innerHTML = barcode("123456789012", 14, 75)
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+</body>
+</html>
