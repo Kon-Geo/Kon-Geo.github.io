@@ -87,7 +87,7 @@
             }
             
             set(row, col, value, active=false) {
-                if (isNaN(value)) {
+                if (value.toString() == "NaN") {
                     return;
                 }
                 const cell = this.element.rows[row].children[col + 1];
@@ -176,13 +176,14 @@
             }
             frac = frac.simplify();
             const value = frac.valueOf();
+            const sign = frac.s == -1 ? "-" : "";
             if (frac.d == 1) {
                 return `${frac.s == -1 ? "-" : ""}${frac.n}`;
             }
             // if (Number(value.toFixed(6)) == value) {
             //     return `${value}`;
             // }
-            return `(${frac.n}/${frac.d})`;
+            return `${sign}(${frac.n}/${frac.d})`;
         }
 
         function poly(l) {
