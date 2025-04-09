@@ -63,6 +63,14 @@
         const divisor_factors_container = document.getElementById("divisor-factors");
         const result_container = document.getElementById("result");
         const table_element = document.getElementById("table");
+        const colors = [
+            "lightcoral",
+            "lightsalmon",
+            "lightseagreen",
+            "lightskyblue",
+            "lightslategray",
+            "lightsteelblue",
+        ]
         let table;
         let n1 = 0;
         let n2 = 0;
@@ -73,27 +81,29 @@
                 const n_cols = this.dividend_degree + 1;
                 let rows = `<tr class="border-bottom border-light"><th class="border-end border-light">#</th>`;
                 for (let i=0; i < n_cols + this.divisor_degree; i++) {
-                    if (i == this.dividend_degree + 1) {
-                        rows += `<th class="border-start border-light"></th>`;
+                    if (i == this.dividend_degree) {
+                        rows += `<th class="border-end border-light"></th>`;
                     } else {
                         rows += `<th></th>`;
                     }
                 }
                 rows += `</tr>`;
                 for (let i=0; i < n_rows - 1; i++) {
-                    rows += `<tr><th class="border-0 border-end border-light">${i + 1}<th>${"<td></td>".repeat(n_cols - 1)}<td class="border-0 border-start border-light"></td></tr>`;
+                    rows += `<tr><th class="border-0 border-end border-light">${i + 1}${"<td></td>".repeat(n_cols)}<td class="border-0 border-start border-light"></td></tr>`;
                 }
                 this.element.innerHTML = rows;
             }
             
-            set(row, col, value, active=false) {
-                if (value.toString() == "NaN") {
-                    return;
-                }
+            set(row, col, value, color=false) {
                 const cell = this.element.rows[row].children[col + 1];
-                cell.innerHTML = value;
-                if (active) {
+                if (value != undefined && value.toString() != "NaN") {
+                    cell.innerHTML = value;
+                }
+                if (color == true) {
+                    cell.style.backgroundColor = "";
                     cell.classList.add("table-active");
+                } else if (color != false) {
+                    cell.style.backgroundColor = color;
                 }
             }
 
@@ -121,39 +131,42 @@
         }
 
         function divide(dividend, divisor) {
-            let o1 = Array.from(dividend);
-            let o2 = Array.from(divisor);
+            let o1 = dividend.map(c => Fraction(c));
+            let o2 = divisor.map(c => Fraction(c));
             let n1 = o1.length;
             let n2 = o2.length;
             o2[0] = Fraction(o2[0], 1);
-            for (let [i, x2] of Object.entries(o2.slice(1))) {
-                i = parseInt(i);
-                o2[i + 1] = Fraction(-x2, o2[0]);
-                table.set(0, n1 + i, toFraction(o2[i + 1]))
+            for (let i = 1; i < n2; i++) {
+                o2[i] = Fraction(-o2[i], o2[0]);
+                table.set(0, n1 + i - 1, toFraction(o2[i], false));
             }
+
             for (let i=0; i < n1 - n2 + 1; i++) {
-                x1 = o1[i]
+                let x1 = o1[i]
                 for (let [j, x2] of Object.entries(o2.slice(1))) {
                     j = parseInt(j);
                     let row = 2 * (n2 - j - 1) - 1;
                     let col = i + j + 1;
                     let product = x1 * x2;
+                    let color = colors[i % colors.length];
                     o1[col] += product;
-                    table.set(row, col, toFraction(product));
-                    table.set(row + 1, col, toFraction(o1[col]));
+                    if (row == n1 - 1) {
+                        table.set(row + 1, col - 1, undefined, color);
+                    }
+                    table.set(row, col, toFraction(product, false), color);
+                    table.set(row + 1, col, toFraction(o1[col], false), color);
                     if (col > n1 - n2) {
-                        table.set(n1, col, toFraction(o1[col]), true);
+                        table.set(n1, col, toFraction(o1[col], false), true);
                     }
                 }
             }
             for (let [i, x1] of Object.entries(o1)) {
                 i = parseInt(i);
                 if (i < n2 - 1) {
-                    let row = 2 * (n2 - i - 1)
-                    table.set(row, i, toFraction(dividend[i]))
+                    let row = 2 * (n2 - i - 1);
+                    table.set(row, i, toFraction(dividend[i], false))
                 }
                 table.set(0, i, dividend[i]);
-                // o1[i] = Fraction(x1, o2[0]);
             }
             return [o1.slice(0, -n2+1), o1.slice(-n2+1)];
         }
@@ -167,23 +180,24 @@
             const fmt_divisor = poly(divisor);
             const fmt_quotient = poly(quotient);
             const fmt_remainder = poly(remainder);
-            result_container.innerHTML = `${fmt_dividend} = ${coeff == "1" ? "" : coeff}(${fmt_divisor})(${fmt_quotient})${fmt_remainder == "0" ? "" : ` + ${fmt_remainder}`}`;
+            result_container.innerHTML = `${fmt_dividend} = <br>${coeff == "1" ? "" : coeff}(${fmt_divisor})(${fmt_quotient})${fmt_remainder == "0" ? "" : ` + ${fmt_remainder}`}`;
         }
 
-        function toFraction(frac) {
+        function toFraction(frac, parenthesis=true) {
             if (typeof frac == "number") {
                 frac = Fraction(frac, 1);
             }
             frac = frac.simplify();
-            const value = frac.valueOf();
             const sign = frac.s == -1 ? "-" : "";
+            const value = frac.valueOf();
             if (frac.d == 1) {
-                return `${frac.s == -1 ? "-" : ""}${frac.n}`;
+                return `${sign}${frac.n}`;
             }
-            // if (Number(value.toFixed(6)) == value) {
-            //     return `${value}`;
-            // }
-            return `${sign}(${frac.n}/${frac.d})`;
+            if (parenthesis) {
+                return `${sign}(${frac.n}/${frac.d})`;
+            } else {
+                return `${sign}${frac.n}/${frac.d}`;
+            }
         }
 
         function poly(l) {
@@ -251,7 +265,7 @@
             calculate();
         }
 
-        // manual([1, -6, 14, -16, 9, -3], [1, -3, 2, -1]);
+        manual([1, -6, 14, -16, 9, -3], [2, -3, 4, -2]);
     </script>
 </body>
 </html>
