@@ -133,42 +133,41 @@
         function divide(dividend, divisor) {
             let o1 = dividend.map(c => Fraction(c));
             let o2 = divisor.map(c => Fraction(c));
-            let n1 = o1.length;
-            let n2 = o2.length;
-            o2[0] = Fraction(o2[0], 1);
-            for (let i = 1; i < n2; i++) {
-                o2[i] = Fraction(-o2[i], o2[0]);
-                table.set(0, n1 + i - 1, toFraction(o2[i], false));
+            let n1 = o1.length - 1;
+            let n2 = o2.length - 1;
+            const hdtc = Fraction(o2.splice(0, 1), 1);
+            for (let i = 0; i < n2; i++) {
+                o2[i] = Fraction(-o2[i], hdtc);
+                table.set(0, n1 + i + 1, toFraction(o2[i], false));
             }
-
             for (let i=0; i < n1 - n2 + 1; i++) {
                 let x1 = o1[i]
-                for (let [j, x2] of Object.entries(o2.slice(1))) {
+                for (let [j, x2] of Object.entries(o2)) {
                     j = parseInt(j);
-                    let row = 2 * (n2 - j - 1) - 1;
+                    let row = 2 * (n2 - j) - 1;
                     let col = i + j + 1;
                     let product = x1 * x2;
                     let color = colors[i % colors.length];
                     o1[col] += product;
-                    if (row == n1 - 1) {
-                        table.set(row + 1, col - 1, undefined, color);
-                    }
                     table.set(row, col, toFraction(product, false), color);
                     table.set(row + 1, col, toFraction(o1[col], false), color);
+                    if (row == n1) {
+                        table.set(row + 1, col - 1, undefined, color);
+                    }
                     if (col > n1 - n2) {
-                        table.set(n1, col, toFraction(o1[col], false), true);
+                        table.set(2 * n2, col, toFraction(o1[col], false), true);
                     }
                 }
             }
             for (let [i, x1] of Object.entries(o1)) {
                 i = parseInt(i);
-                if (i < n2 - 1) {
-                    let row = 2 * (n2 - i - 1);
+                if (i < n2) {
+                    let row = 2 * (n2 - i);
                     table.set(row, i, toFraction(dividend[i], false))
                 }
                 table.set(0, i, dividend[i]);
             }
-            return [o1.slice(0, -n2+1), o1.slice(-n2+1)];
+            return [o1.slice(0, -n2), o1.slice(-n2)];
         }
 
         function calculate() {
@@ -266,6 +265,7 @@
         }
 
         // manual([1, -6, 14, -16, 9, -3], [2, -3, 4, -2]);
+        manual([3, 10, -3, -8, 15, -14, 6, -2], [1, 2, -3, 2, -1]);
     </script>
 </body>
 </html>
