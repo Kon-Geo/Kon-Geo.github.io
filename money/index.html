@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <title>Money Calculator</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#317EFB">
+</head>
+<body>
+    <style>
+        #cards input::-webkit-outer-spin-button,
+        #cards input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        #cards input[type=number] {
+            appearance: textfield;
+            -moz-appearance: textfield;
+        }
+    </style>
+    <nav class="navbar" style="background-color: #2d3238;" data-bs-theme="dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Money Calculator</a>
+        </div>
+    </nav>
+    <div class="container">
+        <h1 class="text-center mt-1"><span id="total">0</span>€</h1>
+        <div class="d-flex flex-row flex-wrap justify-content-around gap-3" id="cards"></div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+    <script>
+        class Factor {
+            code = `
+                <div class="card-header text-center">{VALUE}€</div>
+                <div class="card-body p-2">
+                    <div class="input-group">
+                        <button class="btn btn-danger btn-sm"><i class="bi bi-dash-lg"></i></button>
+                        <input type="number" class="form-control text-center" id="1cent" value="0">
+                        <button class="btn btn-success btn-sm"><i class="bi bi-plus-lg"></i></button>
+                    </div>
+                </div>
+            `;
+
+            initElement() {
+                this.element = document.createElement("div");
+                this.element.className = "card";
+                this.element.style.width = "11rem";
+                this.parent.container.insertAdjacentElement("beforeend", this.element);
+                this.element.innerHTML = this.code.replaceAll("{VALUE}", this.weight);
+                this.buttons = this.element.querySelectorAll("button");
+                this.buttons[0].addEventListener("click", this.decrement.bind(this));
+                this.buttons[1].addEventListener("click", this.increment.bind(this));
+                this.input = this.element.querySelector("input");
+                this.input.addEventListener("input", this.updateFromInput.bind(this));
+            }
+
+            decrement() {
+                this.value--;
+                this.input.value = this.value;
+                this.parent.update();
+            }
+
+            increment() {
+                this.value++;
+                this.input.value = this.value;
+                this.parent.update();
+            }
+
+            updateFromInput() {
+                this.value = parseInt(this.input.value);
+            }
+
+            constructor(parent, weight) {
+                this.parent = parent;
+                this.weight = weight;
+                this.value = 0;
+                this.initElement();
+            }
+        }
+
+        class App {
+            update() {
+                let total = 0;
+                for (const [weight, factor] of Object.entries(this.factors)) {
+                    total += weight * factor.value;
+                }
+                this.total.innerHTML = (total / 100).toFixed(2);
+            }
+
+            constructor() {
+                this.weights = [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000];
+                this.factors = {};
+                this.total = document.getElementById("total");
+                this.container = document.getElementById("cards");
+                for (const weight of this.weights) {
+                    this.factors[weight] = new Factor(this, (weight / 100).toFixed(2));
+                }
+            }
+        }
+
+        const app = new App();
+    </script>
+</body>
+</html>
