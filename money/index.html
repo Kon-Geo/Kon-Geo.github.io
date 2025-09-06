@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <title>Money Calculator</title>
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#317EFB">
+    <meta name="theme-color" content="#212529">
 </head>
 <body>
     <style>
@@ -71,6 +71,7 @@
 
             updateFromInput() {
                 this.value = parseInt(this.input.value);
+                this.parent.update();
             }
 
             constructor(parent, weight) {
@@ -85,7 +86,7 @@
             update() {
                 let total = 0;
                 for (const [weight, factor] of Object.entries(this.factors)) {
-                    total += weight * factor.value;
+                    total += weight * (factor.value || 0);
                 }
                 this.total.innerHTML = (total / 100).toFixed(2);
             }

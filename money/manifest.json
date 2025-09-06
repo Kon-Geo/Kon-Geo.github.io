@@ -3,8 +3,8 @@
     "short_name": "Money Calculator",
     "start_url": "index.html",
     "display": "standalone",
-    "background_color": "#ffffff",
-    "theme_color": "#317EFB",
+    "background_color": "#212529",
+    "theme_color": "#212529",
     "icons": [
         {
             "src": "icon-512.png",
